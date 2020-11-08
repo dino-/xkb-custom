@@ -108,9 +108,12 @@ The documentation says the `evdev.lst` file is legacy and can be ignored on
 modern systems. It also says this file can be generated from the XML but I do
 not know how.
 
-Finally, to use your new symbol, you can place it in commands or xorg conf blocks
+Finally, to use your new symbol, you can place it in commands
 
     $ setxkbmap -option 'mysymbols:rctl_rwin'
+
+or xorg conf blocks
+
     Option "XkbOptions" "mysymbols:rctl_rwin"
 
 
@@ -137,8 +140,8 @@ There's some good help for creating custom symbol files and making these
 available on your system here
 <https://www.x.org/releases/current/doc/xorg-docs/input/XKB-Enhancing.html>
 
-Some additional, possibly helpful info is on the [Arch
-wiki](https://wiki.archlinux.org/index.php/Xorg/Keyboard_configuration)
+Some additional, possibly helpful info is on the Arch wiki
+<https://wiki.archlinux.org/index.php/Xorg/Keyboard_configuration>
 
 
 ## Contact
