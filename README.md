@@ -7,20 +7,45 @@ Making XKB keyboard customizations
 ## Adding or changing the symbols or rules being used by your system
 
 For starters, you can issue this command to see what's in-effect right now
-(Arch: `xorg-setxkbmap`)
 
     $ setxkbmap -print -verbose 10
 
+Here's what my output looked like
+
+    Setting verbose level to 10
+    locale is C
+    Trying to load rules file ./rules/evdev...
+    Trying to load rules file /usr/share/X11/xkb/rules/evdev...
+    Success.
+    Applied rules from evdev:
+    rules:      evdev
+    model:      pc105
+    layout:     us
+    options:    compose:sclk,ctrl:swapcaps,keypad:pointerkeys
+    Trying to build keymap using the following components:
+    keycodes:   evdev+aliases(qwerty)
+    types:      complete
+    compat:     complete
+    symbols:    pc+us+inet(evdev)+ctrl(swapcaps)+compose(sclk)+keypad(pointerkeys)
+    geometry:   pc(pc105)
+    xkb_keymap {
+      xkb_keycodes  { include "evdev+aliases(qwerty)"  };
+      xkb_types     { include "complete"  };
+      xkb_compat    { include "complete"  };
+      xkb_symbols   { include "pc+us+inet(evdev)+ctrl(swapcaps)+compose(sclk)+keypad(pointerkeys)"  };
+      xkb_geometry  { include "pc(pc105)"  };
+    };
+
 Notice the line in the output that looks like `rules:   evdev`
 
-This is the rules that were set or selected by the Xorg server. We will need
-this later when making new symbols/rules. It's possible for this to be `base`
-instead but `evdev` is more common on Linux systems.
+This is the rules file that was selected by the Xorg server. We will need this
+later when making new symbols. It's possible for this to be `base` instead but
+`evdev` is more common on Linux systems.
 
 To see what sorts of rules for symbols are available, look through
 `/usr/share/X11/xkb/symbols/evdev` for lines that start with things like
-`altwin:` or `ctrl:` or similar. These are predefined symbols changes that ship
-with XKB.
+`altwin:` or `ctrl:` or similar. These are predefined symbols that ship with
+XKB.
 
 Another way to browse these is `man xkeyboard-config`
 
@@ -32,11 +57,11 @@ To try some out, issue commands like this
 Note the `-option ''` above resets all option changes, this is often desireable
 when trying things because they are cumulative.
 
-After getting things the way you want them, you'll want to write these settings
-into a file in `/etc/X11/xorg.conf.d/` if possible because setting them this
-way is more persistent across xrandr changes. There will be less mucking around
-with custom scripts to restore keyboard settings. A sample file,
-`00-keyboard.conf`, is in this project.
+After getting things the way you want them, you may want to write these
+settings into a file in `/etc/X11/xorg.conf.d/`. Setting them this way is more
+persistent across xrandr changes. There will be less mucking around with custom
+scripts to restore keyboard settings. A sample file, `00-keyboard.conf`, is in
+this project.
 
 ## Creating completely new symbols and rules
 
@@ -104,9 +129,9 @@ in the group
       ...
 ```
 
-The documentation says the `evdev.lst` file is legacy and can be ignored on
-modern systems. It also says this file can be generated from the XML but I do
-not know how.
+The XKB documentation suggests the `evdev.lst` file is legacy and less-often
+used on modern systems. It also says this file can be generated from the XML
+but I do not know how.
 
 Finally, to use your new symbol, you can place it in commands
 
@@ -123,15 +148,22 @@ Reset everything to the us layout, useful if you're changing entire layouts
 
     $ setxkbmap us
 
-Not sure how useful this is but, to dump the entire keyboard layout (Arch:
-`xorg-xkbcomp`)
+Not sure how useful this is but, to dump the entire keyboard layout
 
     $ xkbcomp -xkb $DISPLAY OUTPUT_FILE
     $ xkbcomp -xkb $DISPLAY layout-current
 
-A handy tool to see what keys are generating what is `xev` (Arch: `xorg-xev`)
+A handy tool to see what keys are generating what is `xev`
 
 ## Links and documentation
+
+Tools mentioned in this document
+
+                Arch Linux package
+    -------------------------------
+    setxkbmap   xorg-setxkbmap
+    xev         xorg-xev
+    xkbcomp     xorg-xkbcomp
 
 The main XKB docs are here <https://www.x.org/wiki/XKB/> and here
 <https://www.x.org/releases/current/doc/xorg-docs/input/XKB-Config.html>
